@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="065911d3-5140-4ffe-a2dc-9e83c576e21d" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<os:object-store name="Object_store" doc:name="Object store" doc:id="adefd186-e4cc-4e4e-bf1b-102395f4c8de" config-ref="ObjectStore_Config"/>
+	<os:config name="ObjectStore_Config" doc:name="ObjectStore Config" doc:id="3a3ff97c-ccf7-476a-8e58-acb4aa6f8c43" >
+		<os:connection />
+	</os:config>
+	<flow name="mersha-proFlow" doc:id="8fa2da84-1016-4309-a558-a11d9c1a97f5" >
+		<http:listener doc:name="Listener" doc:id="838a410f-03e9-4cb7-bd36-8578a26c87ac" config-ref="HTTP_Listener_config" path="/test"/>
+		<os:store doc:name="Store" doc:id="030e4418-2e2c-4fb1-b466-80be5a414aa0" key="md" objectStore="Object_store"/>
+	</flow>
+	<flow name="mersha-proFlow1" doc:id="ac7e6b47-f10f-4063-826a-02d3d3073bcc" >
+		<http:listener doc:name="Listener" doc:id="910621f2-5fe9-4e1a-9466-85471c0ff46a" config-ref="HTTP_Listener_config" path="/os"/>
+		<logger level="INFO" doc:name="Logger" doc:id="ac0030e6-9734-44ed-a45b-7ce8b704ece1" message="#[payload]" />
+		<os:retrieve doc:name="Retrieve" doc:id="dc5aa16b-a20a-41a6-b4cb-53b266faaaf1" key="md" objectStore="Object_store" />
+	</flow>
+</mule>
